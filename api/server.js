@@ -9,6 +9,28 @@ const server = express() //<< this is the instance of the express app
 server.use(express.json()) //<< gives express the ability to read and parse JSON
 
 
+server.post('/api/users', (req, res) => {
+    const user = req.body;
+    if (!user.name || !user.bio) {
+        res.status(422).json({
+            message: "name and bio required"
+        })
+    } else {
+    User.insert(user)
+        .then(createdUser => {
+            res.status(201).json(createdUser)
+        })
+        .catch(err => {
+            res.status(500).json({
+                message: "Error fetching user",
+                err: err.message
+            })
+        })
+    }
+
+})
+
+
 
 server.get('/api/users', (req, res) => {
     User.find()
