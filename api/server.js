@@ -9,7 +9,7 @@ const server = express() //<< this is the instance of the express app
 server.use(express.json()) //<< gives express the ability to read and parse JSON
 
 
-server.delete('api/users/:id', async (req, res) => {
+server.delete('/api/users/:id', async (req, res) => {
     try {
         const possibleUser = await User.findById(req.params.id)
         if(!possibleUser) {
@@ -21,8 +21,7 @@ server.delete('api/users/:id', async (req, res) => {
             res.status(200).json(deletedUser)
         }
     }
-    catch (err) {
-        
+    catch (err) {        
             res.status(500).json({
                 message: "Error fetching user",
                 err: err.message
