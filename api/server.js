@@ -8,6 +8,28 @@ const server = express() //<< this is the instance of the express app
 
 server.use(express.json()) //<< gives express the ability to read and parse JSON
 
+server.put('/api/users/:id', async (req, res) => {
+    try {
+        const possibleUser = await User.findById(req.params.id)
+        if(!possibleUser) {
+            res.status(404).json({
+                message: 'The user with the specified ID does not exist'
+            })
+        } else {
+            if (!req.body.name || !req.body.bio) {
+                res.status(400).json({
+                    message: 'Please provide name and bio for the user' 
+                })
+            }
+        }
+    } catch (err) {
+        res.status(500).json({
+            message: "Error updating user",
+            err: err.message
+        })
+    }
+})
+
 
 server.delete('/api/users/:id', async (req, res) => {
     try {
